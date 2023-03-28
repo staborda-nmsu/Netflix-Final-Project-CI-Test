@@ -1,9 +1,6 @@
 package com.company.gameStore.models;
 
-
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 
@@ -19,6 +16,7 @@ public class Invoice {
     private String name;
     private String street;
     private String city;
+    private String state;
     private String zipcode;
     @Column(name = "item_type")
     private String itemType;
@@ -63,6 +61,14 @@ public class Invoice {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     public String getZipcode() {
