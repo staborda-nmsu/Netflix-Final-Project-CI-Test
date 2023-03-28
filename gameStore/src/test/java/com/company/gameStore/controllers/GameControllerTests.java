@@ -126,16 +126,17 @@ public class GameControllerTests {
 
     // Testing PUT /records/{id}
     @Test
-    public void shouldUpdateByIdAndReturn204StatusCode() throws Exception {
+    public void shouldUpdateAndReturn204StatusCode() throws Exception {
 
         // This method returns nothing, so we're just checking for correct status code
         // In this case, code 204, which indicates No Content
 
         Game inputGame = new Game("Minecraft", "E",
                 "Minecraft is a game", 7.25, "Mojang");
-
+        doReturn(inputGame).when(gameRepo).save(inputGame);
+        inputGame.setTitle("Apex Legends");
+        inputGame.setId(0);
         String inputJson = mapper.writeValueAsString(inputGame);
-
         mockMvc.perform(
                         put("/games")
                                 .content(inputJson)
@@ -148,7 +149,9 @@ public class GameControllerTests {
     // Testing DELETE /records/{id}
     @Test
     public void shouldDeleteByIdAndReturn204StatusCode() throws Exception {
-
+        Game inputGame = new Game("Minecraft", "E",
+                "Minecraft is a game", 7.25, "Mojang");
+        doReturn(inputGame).when(gameRepo).save(inputGame);
         // This method returns nothing, so we're just checking for correct status code
         // In this case, code 204, which indicates No Content
         mockMvc.perform(delete("/games/0"))
