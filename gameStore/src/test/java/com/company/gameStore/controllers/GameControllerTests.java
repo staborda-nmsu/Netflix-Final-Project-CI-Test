@@ -5,18 +5,24 @@ import com.company.gameStore.repositories.GameRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -39,16 +45,16 @@ public class GameControllerTests {
     private ObjectMapper mapper = new ObjectMapper();
 
     // A list of records for testing purposes
-    private List<Game> gameList;
-
+//    @BeforeEach
+//    void setUp(){
+//        gameRepo = Mockito.mock(GameRepository.class);
+//    }
     // Testing GET /records
     @Test
     public void shouldReturnAllGames() throws Exception {
 
         // ARRANGE
         // Convert Java object to JSON
-        String outputJson = mapper.writeValueAsString(gameList);
-
         // ACT
         mockMvc.perform(get("/games"))                // Perform the GET request
                 .andDo(print())                          // Print results to console
@@ -62,14 +68,10 @@ public class GameControllerTests {
         // ARRANGE
         Game inputGame = new Game("Minecraft", "E",
                 "Minecraft is a game", 7.25, "Mojang");
-
+        inputGame.setId(0);
+        when(gameRepo.save(inputGame)).thenReturn(inputGame);
         // Convert Java Object to JSON
         String inputJson = mapper.writeValueAsString(inputGame);
-
-        Game outputGame = new Game("Minecraft", "E",
-                "Minecraft is a game", 7.25, "Mojang");
-
-        String outputJson = mapper.writeValueAsString(outputGame);
 
         // ACT
         mockMvc.perform(
@@ -87,8 +89,8 @@ public class GameControllerTests {
 
         Game outputGame = new Game("Minecraft", "E",
                 "Minecraft is a game", 7.25, "Mojang");
-
-        doReturn(outputGame).when(gameRepo).save(outputGame);
+        outputGame.setId(0);
+        when(gameRepo.findByStudio(outputGame.getStudio())).thenReturn(Optional.of(outputGame));
         String outputJson = mapper.writeValueAsString(outputGame);
 
         mockMvc.perform(get("/games/studio/Mojang"))
@@ -101,8 +103,8 @@ public class GameControllerTests {
 
         Game outputGame = new Game("Minecraft", "E",
                 "Minecraft is a game", 7.25, "Mojang");
-
-        doReturn(outputGame).when(gameRepo).save(outputGame);
+        outputGame.setId(0);
+        when(gameRepo.findByEsrbRating(outputGame.getEsrbRating())).thenReturn(Optional.of(outputGame));
         String outputJson = mapper.writeValueAsString(outputGame);
 
         mockMvc.perform(get("/games/esrb/E"))
@@ -115,8 +117,8 @@ public class GameControllerTests {
 
         Game outputGame = new Game("Minecraft", "E",
                 "Minecraft is a game", 7.25, "Mojang");
-
-        doReturn(outputGame).when(gameRepo).save(outputGame);
+        outputGame.setId(0);
+        when(gameRepo.findByTitle(outputGame.getTitle())).thenReturn(Optional.of(outputGame));
         String outputJson = mapper.writeValueAsString(outputGame);
 
         mockMvc.perform(get("/games/title/Minecraft"))
@@ -126,18 +128,20 @@ public class GameControllerTests {
 
     // Testing PUT /records/{id}
     @Test
-    public void shouldUpdateByIdAndReturn204StatusCode() throws Exception {
+    public void shouldUpdateAndReturn204StatusCode() throws Exception {
 
         // This method returns nothing, so we're just checking for correct status code
         // In this case, code 204, which indicates No Content
 
         Game inputGame = new Game("Minecraft", "E",
                 "Minecraft is a game", 7.25, "Mojang");
-
+        inputGame.setId(0);
+        when(gameRepo.findById(0)).thenReturn(Optional.of(inputGame));
+        when(gameRepo.save(inputGame)).thenReturn(inputGame);
         String inputJson = mapper.writeValueAsString(inputGame);
 
         mockMvc.perform(
-                        put("/games")
+                        put("/games/{id}", 0)
                                 .content(inputJson)
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -148,7 +152,9 @@ public class GameControllerTests {
     // Testing DELETE /records/{id}
     @Test
     public void shouldDeleteByIdAndReturn204StatusCode() throws Exception {
-
+        Game inputGame = new Game("Minecraft", "E",
+                "Minecraft is a game", 7.25, "Mojang");
+        when(gameRepo.findById(0)).thenReturn(Optional.of(inputGame));
         // This method returns nothing, so we're just checking for correct status code
         // In this case, code 204, which indicates No Content
         mockMvc.perform(delete("/games/0"))
