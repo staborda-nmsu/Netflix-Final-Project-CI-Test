@@ -3,6 +3,8 @@ package com.company.gameStore.models;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -15,14 +17,20 @@ public class Game {
     @Column(name="book_id")
     private Integer id;
     @Column(name="title")
+    @NotNull(message = "You must supply a value for Title.")
     String title;
     @Column(name="esrb_rating")
+    @NotNull(message = "You must supply a value for Rating.")
     String esrbRating;
     @Column(name="description")
+    @NotNull(message = "You must supply a value for Description.")
     String description;
     @Column(name="price")
+    @NotNull(message = "You must supply a value for Price.")
+    @Digits(integer = 5, fraction = 2, message = "Price must be a number with up to 2 decimal places.")
     Double price;
     @Column(name="studio")
+    @NotNull(message = "You must supply a value for Studio.")
     String studio;
     @Column(name="quantity")
     int quantity;
