@@ -49,14 +49,14 @@ public class GameController {
 
     @PostMapping("/games")
     @ResponseStatus(HttpStatus.CREATED)
-    public Game addPublisher(@RequestBody Game Publisher) {
-        return repo.save(Publisher);
+    public Game addPublisher(@RequestBody Game game) {
+        return repo.save(game);
     }
 
     @PutMapping("/games")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updatePublisher(@RequestBody Game Publisher) {
-        repo.save(Publisher);
+    public void updatePublisher(@RequestBody Game game) {
+        repo.save(game);
     }
 
     @DeleteMapping("/games/{id}")
