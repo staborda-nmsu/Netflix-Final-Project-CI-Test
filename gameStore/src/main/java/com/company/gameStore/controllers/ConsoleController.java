@@ -8,7 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -32,14 +34,20 @@ public class ConsoleController {
 
     @PostMapping("/consoles")
     @ResponseStatus(HttpStatus.CREATED)
-    public Console addConsole(@RequestBody Console console) {
+    public Console addConsole(@RequestBody @Valid Console console) {
         return consoleRepository.save(console);
     }
 
-    @PutMapping("/consoles")
+    @PutMapping("/consoles/{consoleId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateConsole(@RequestBody Console console) {
-        consoleRepository.save(console);
+    public void updateConsole(@PathVariable int consoleId, @RequestBody @Valid Console console) {
+        Optional<Console> existingConsole = consoleRepository.findById(consoleId);
+        if (existingConsole.isPresent()) {
+            console.setId(consoleId);
+            consoleRepository.save(console);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Console not found");
+        }
     }
 
     @DeleteMapping("/consoles/{consoleId}")

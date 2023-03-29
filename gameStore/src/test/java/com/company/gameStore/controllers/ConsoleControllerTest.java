@@ -138,11 +138,12 @@ public class ConsoleControllerTest {
         mockConsole.setQuantity(10);
 
         // Mock
+        doReturn(Optional.of(mockConsole)).when(consoleRepository).findById(1);
         doReturn(mockConsole).when(consoleRepository).save(console);
         String conosleAsString = mapper.writeValueAsString(console);
 
         // Act ...
-        mockMvc.perform(put("/consoles")
+        mockMvc.perform(put("/consoles/1")
                         .content(conosleAsString)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
