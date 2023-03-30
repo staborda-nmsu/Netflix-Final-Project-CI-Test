@@ -93,7 +93,7 @@ public class GameControllerTests {
         outputGame.setId(0);
         List<Game> gameList = new ArrayList<>();
         gameList.add(outputGame);
-        when(gameRepo.findByEsrbRating(outputGame.getEsrbRating())).thenReturn(Optional.of(gameList));
+        when(gameRepo.findByStudio(outputGame.getStudio())).thenReturn(Optional.of(gameList));
         String outputJson = mapper.writeValueAsString(outputGame);
 
         mockMvc.perform(get("/games/studio/Mojang"))
