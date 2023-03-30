@@ -14,7 +14,7 @@ import java.util.Objects;
 public class Game {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="book_id")
+    @Column(name="game_id")
     private Integer id;
     @Column(name="title")
     @NotNull(message = "You must supply a value for Title.")
