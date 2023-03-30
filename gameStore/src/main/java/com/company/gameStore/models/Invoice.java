@@ -1,11 +1,12 @@
 package com.company.gameStore.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "invoice")
 public class Invoice {
 
@@ -13,22 +14,40 @@ public class Invoice {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "invoice_id")
     private int invoiceId;
+    @NotNull(message = "You must provide a name.")
     private String name;
+    @NotNull(message = "You must provide a street.")
     private String street;
+    @NotNull(message = "You must provide a city.")
     private String city;
+    @NotNull(message = "You must provide a state.")
     private String state;
+    @NotNull(message = "You must provide a zipcode.")
     private String zipcode;
     @Column(name = "item_type")
+    @NotNull(message = "You must provide an item type.")
     private String itemType;
     @Column(name = "item_id")
+    @NotNull(message = "You must provide an item ID.")
     private int itemId;
     @Column(name = "unit_price")
+    @NotNull(message = "You must provide a unit price.")
+    @Digits(integer = 8, fraction = 2, message = "Unit price must be a number with up to 2 decimal places.")
     private BigDecimal unitPrice;
+    @NotNull(message = "You must provide a quantity.")
     private int quantity;
+    @NotNull(message = "You must provide a subtotal.")
+    @Digits(integer = 8, fraction = 2, message = "Subtotal must be a number with up to 2 decimal places.")
     private BigDecimal subtotal;
+    @NotNull(message = "You must provide a tax.")
+    @Digits(integer = 8, fraction = 2, message = "Tax must be a number with up to 2 decimal places.")
     private BigDecimal tax;
     @Column(name = "processing_fee")
+    @NotNull(message = "You must provide a processing fee.")
+    @Digits(integer = 8, fraction = 2, message = "Processing fee must be a number with up to 2 decimal places.")
     private BigDecimal processingFee;
+    @NotNull(message = "You must provide a total price.")
+    @Digits(integer = 8, fraction = 2, message = "Total must be a number with up to 2 decimal places.")
     private BigDecimal total;
 
     public int getInvoiceId() {
@@ -141,5 +160,18 @@ public class Invoice {
 
     public void setTotal(BigDecimal total) {
         this.total = total;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Invoice invoice = (Invoice) o;
+        return invoiceId == invoice.invoiceId && itemId == invoice.itemId && quantity == invoice.quantity && Objects.equals(name, invoice.name) && Objects.equals(street, invoice.street) && Objects.equals(city, invoice.city) && Objects.equals(state, invoice.state) && Objects.equals(zipcode, invoice.zipcode) && Objects.equals(itemType, invoice.itemType) && Objects.equals(unitPrice, invoice.unitPrice) && Objects.equals(subtotal, invoice.subtotal) && Objects.equals(tax, invoice.tax) && Objects.equals(processingFee, invoice.processingFee) && Objects.equals(total, invoice.total);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(invoiceId, name, street, city, state, zipcode, itemType, itemId, unitPrice, quantity, subtotal, tax, processingFee, total);
     }
 }
