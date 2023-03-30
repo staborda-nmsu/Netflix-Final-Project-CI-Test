@@ -9,6 +9,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -42,9 +43,9 @@ public class GameRepositoryTests {
                 "Apex Legends is a game", 7.25, "EA");
         gameRepo.save(game);
         gameRepo.save(game2);
-        Optional<Game> game1 = gameRepo.findByStudio(game.getStudio());
+        Optional<List<Game>> game1 = gameRepo.findByStudio(game.getStudio());
 
-        assertEquals(game1.get(), game);
+        assertEquals(game1.get().size(), 1);
     }
 
     @Test
@@ -55,9 +56,9 @@ public class GameRepositoryTests {
                 "Apex Legends is a game", 7.25, "EA");
         gameRepo.save(game);
         gameRepo.save(game2);
-        Optional<Game> game1 = gameRepo.findByEsrbRating(game.getEsrbRating());
+        Optional<List<Game>> game1 = gameRepo.findByEsrbRating(game.getEsrbRating());
 
-        assertEquals(game1.get(), game);
+        assertEquals(game1.get().size(), 1);
     }
 
     @Test

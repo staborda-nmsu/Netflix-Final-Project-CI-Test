@@ -21,8 +21,8 @@ public class GameController {
         }
 
         @GetMapping("/games/studio/{studio}")
-        public ResponseEntity<Game> getGameByStudio(@PathVariable String studio) {
-            Optional<Game> returnVal = repo.findByStudio(studio);
+        public ResponseEntity<List<Game>> getGameByStudio(@PathVariable String studio) {
+            Optional<List<Game>> returnVal = repo.findByStudio(studio);
             if (returnVal.isPresent()) {
                 return ResponseEntity.ok(returnVal.get());
             } else {
@@ -31,8 +31,8 @@ public class GameController {
         }
 
         @GetMapping("/games/esrb/{esrb}")
-        public ResponseEntity<Game> getGameByESRB(@PathVariable String esrb) {
-            Optional<Game> returnVal = repo.findByEsrbRating(esrb);
+        public ResponseEntity<List<Game>> getGameByESRB(@PathVariable String esrb) {
+            Optional<List<Game>> returnVal = repo.findByEsrbRating(esrb);
             if (returnVal.isPresent()) {
                 return ResponseEntity.ok(returnVal.get());
             } else {

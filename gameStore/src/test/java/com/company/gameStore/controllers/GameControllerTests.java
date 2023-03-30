@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -90,7 +91,9 @@ public class GameControllerTests {
         Game outputGame = new Game("Minecraft", "E",
                 "Minecraft is a game", 7.25, "Mojang");
         outputGame.setId(0);
-        when(gameRepo.findByStudio(outputGame.getStudio())).thenReturn(Optional.of(outputGame));
+        List<Game> gameList = new ArrayList<>();
+        gameList.add(outputGame);
+        when(gameRepo.findByEsrbRating(outputGame.getEsrbRating())).thenReturn(Optional.of(gameList));
         String outputJson = mapper.writeValueAsString(outputGame);
 
         mockMvc.perform(get("/games/studio/Mojang"))
@@ -104,7 +107,9 @@ public class GameControllerTests {
         Game outputGame = new Game("Minecraft", "E",
                 "Minecraft is a game", 7.25, "Mojang");
         outputGame.setId(0);
-        when(gameRepo.findByEsrbRating(outputGame.getEsrbRating())).thenReturn(Optional.of(outputGame));
+        List<Game> gameList = new ArrayList<>();
+        gameList.add(outputGame);
+        when(gameRepo.findByEsrbRating(outputGame.getEsrbRating())).thenReturn(Optional.of(gameList));
         String outputJson = mapper.writeValueAsString(outputGame);
 
         mockMvc.perform(get("/games/esrb/E"))
