@@ -7,7 +7,7 @@ version: 2.1
 jobs:
   # Below is the definition of your job to build and test your app, you can rename and customize it as you want.
   build-and-test:
-    working_directory: ~/Netflix-Final-Project/gameStore
+    working_directory: ~/Netflix-Final-Project-CI-Test/gameStore
 
     # These next lines define a Docker executor: https://circleci.com/docs/2.0/executor-types/
     # You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
@@ -20,7 +20,7 @@ jobs:
     steps:
       # Checkout the code as the first step.
       - checkout:
-          path: ~/Netflix-Final-Project
+          path: ~/Netflix-Final-Project-CI-Test
       # Use mvn clean and package as the standard maven build phase
       - run:
           name: Build
